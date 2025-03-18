@@ -1,78 +1,16 @@
-import * as THREE from 'three';
-import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
-import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
-import { PointerLockControls } from 'three/examples/jsm/controls/PointerLockControls';
+const express = require('express');
+const path = require('path');
 
-let scene, camera, renderer, controls, player, clock;
-let moveForward = false, moveBackward = false, moveLeft = false, moveRight = false;
-let canJump = false;
+const app = express();
+const PORT = 3000;
 
-function init() {
-    scene = new THREE.Scene();
-    scene.background = new THREE.Color(0x87CEEB);
-    
-    camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-    renderer = new THREE.WebGLRenderer();
-    renderer.setSize(window.innerWidth, window.innerHeight);
-    document.body.appendChild(renderer.domElement);
-    
-    controls = new PointerLockControls(camera, document.body);
-    document.addEventListener('click', () => controls.lock());
-    
-    const light = new THREE.DirectionalLight(0xffffff, 1);
-    light.position.set(10, 10, 10);
-    scene.add(light);
-    
-    const planeGeometry = new THREE.PlaneGeometry(100, 100);
-    const planeMaterial = new THREE.MeshStandardMaterial({ color: 0x228B22 });
-    const plane = new THREE.Mesh(planeGeometry, planeMaterial);
-    plane.rotation.x = -Math.PI / 2;
-    scene.add(plane);
-    
-    player = new THREE.Object3D();
-    player.position.set(0, 1, 0);
-    scene.add(player);
-    
-    camera.position.set(0, 2, -5);
-    player.add(camera);
-    
-    document.addEventListener('keydown', onKeyDown);
-    document.addEventListener('keyup', onKeyUp);
-    
-    clock = new THREE.Clock();
-    animate();
-}
+// Statische Dateien bereitstellen
+app.use(express.static(path.join(__dirname, 'public')));
 
-function onKeyDown(event) {
-    switch (event.code) {
-        case 'KeyT': moveForward = true; break;
-        case 'KeyF': moveBackward = true; break;
-        case 'KeyG': moveLeft = true; break;
-        case 'KeyH': moveRight = true; break;
-        case 'Space': if (canJump) { player.position.y += 1; canJump = false; } break;
-    }
-}
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'index.html'));
+});
 
-function onKeyUp(event) {
-    switch (event.code) {
-        case 'KeyT': moveForward = false; break;
-        case 'KeyF': moveBackward = false; break;
-        case 'KeyG': moveLeft = false; break;
-        case 'KeyH': moveRight = false; break;
-    }
-}
-
-function animate() {
-    requestAnimationFrame(animate);
-    const delta = clock.getDelta();
-    let speed = 5 * delta;
-    
-    if (moveForward) player.position.z -= speed;
-    if (moveBackward) player.position.z += speed;
-    if (moveLeft) player.position.x -= speed;
-    if (moveRight) player.position.x += speed;
-    
-    renderer.render(scene, camera);
-}
-
-init();
+app.listen(PORT, () => {
+    console.log(`Server läuft unter: http://localhost:${PORT}`);
+});

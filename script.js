@@ -45,20 +45,20 @@ function init() {
 
 function onKeyDown(event) {
     switch (event.code) {
-        case 'KeyW': moveForward = true; break;
-        case 'KeyS': moveBackward = true; break;
-        case 'KeyA': moveLeft = true; break;
-        case 'KeyD': moveRight = true; break;
+        case 'KeyT': moveForward = true; break;
+        case 'KeyF': moveBackward = true; break;
+        case 'KeyG': moveLeft = true; break;
+        case 'KeyH': moveRight = true; break;
         case 'Space': if (canJump) { player.position.y += 1; canJump = false; } break;
     }
 }
 
 function onKeyUp(event) {
     switch (event.code) {
-        case 'KeyW': moveForward = false; break;
-        case 'KeyS': moveBackward = false; break;
-        case 'KeyA': moveLeft = false; break;
-        case 'KeyD': moveRight = false; break;
+        case 'KeyT': moveForward = false; break;
+        case 'KeyF': moveBackward = false; break;
+        case 'KeyG': moveLeft = false; break;
+        case 'KeyH': moveRight = false; break;
     }
 }
 
